@@ -1,5 +1,4 @@
-#ifndef COLOR_H
-#define COLOR_H
+#pragma once
 
 #include "vec3.h"
 #include "rtweekend.h"
@@ -48,4 +47,3 @@ void out_color_table(std::ostream &out, std::vector<std::vector<color>> &color_t
         << static_cast<int>(color_table[height][width].e[2]) << '\n';
 }
 
-#endif

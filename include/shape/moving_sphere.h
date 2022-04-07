@@ -1,5 +1,4 @@
-#ifndef MOVING_SPHERE_H
-#define MOVING_SPHERE_H
+#pragma once
 
 #include "rtweekend.h"
 #include "hittable.h"
@@ -61,4 +60,3 @@ bool moving_sphere::hit(const ray &r, double t_min, double t_max, hit_record &re
     return true;
 }
 
-#endif //MOVING_SPHERE_H

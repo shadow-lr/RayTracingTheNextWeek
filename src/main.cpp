@@ -1,17 +1,14 @@
 #include "ray.h"
 #include "vec3.h"
 #include "rtweekend.h"
-
 #include "moving_sphere.h"
-
 #include "color.h"
 #include "hittable_list.h"
 #include "sphere.h"
 #include "material.h"
-#include <omp.h>
-
 #include "camera.h"
 
+#include <omp.h>
 #include <iostream>
 #include <thread>
 #include <mutex>

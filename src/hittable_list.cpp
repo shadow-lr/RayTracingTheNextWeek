@@ -1,32 +1,8 @@
-#pragma once
+//
+// Created by Fgly on 2022/4/7.
+//
 
-#include "hittable.h"
-
-#include <memory>
-#include <vector>
-
-using std::shared_ptr;
-using std::make_shared;
-
-/* hitable_list是所有能够被光线撞击的物体的列表集合*/
-class hittable_list : public hittable {
-public:
-    hittable_list() {}
-
-    hittable_list(shared_ptr<hittable> object) { add(object); }
-
-    void clear() { objects.clear(); }
-
-    void add(shared_ptr<hittable> object) { objects.push_back(object); }
-
-    virtual bool hit(
-            const ray &r, double t_min, double t_max, hit_record &rec) const override;
-
-    virtual bool bounding_box(double time0, double time1, aabb &output_box) const override;
-
-public:
-    std::vector<shared_ptr<hittable>> objects;
-};
+#include "hittable_list.h"
 
 /* 遍历objects中所有对象，与当前的射线进行相交检测*/
 bool hittable_list::hit(const ray &r, double t_min, double t_max, hit_record &rec) const {
@@ -34,7 +10,7 @@ bool hittable_list::hit(const ray &r, double t_min, double t_max, hit_record &re
     bool hit_anything = false;
     auto closest_so_far = t_max;
 
-    for (const auto &object : objects) {
+    for (const auto &object : this->objects) {
         if (object->hit(r, t_min, closest_so_far, temp_rec)) {
             hit_anything = true;
             closest_so_far = temp_rec.t;
@@ -50,13 +26,13 @@ bool hittable_list::hit(const ray &r, double t_min, double t_max, hit_record &re
 
 /* 动态地BVH构造 返回的output_box为遍历hittable中所有object的包围盒之和的合并*/
 bool hittable_list::bounding_box(double time0, double time1, aabb &output_box) const {
-    if (objects.empty()) return false;
+    if (this->objects.empty()) return false;
 
     aabb temp_box;
     bool first_box = true;
 
     /* 如果hittable_list中objects只有一个 那就直接返回temp_box 反之不停地surrounding_box合并包围盒 */
-    for (const auto &object : objects) {
+    for (const auto &object : this->objects) {
         if (!object->bounding_box(time0, time1, temp_box)) return false;
         output_box = first_box ? temp_box : surrounding_box(output_box, temp_box);
         first_box = false;

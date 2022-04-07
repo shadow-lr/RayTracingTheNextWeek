@@ -1,6 +1,4 @@
 #pragma once
-#ifndef CAMERA_H
-#define CAMERA_H
 
 #include "rtweekend.h"
 
@@ -55,4 +53,3 @@ private:
     double time0, time1;    // shutter open/close times
 };
 
-#endif

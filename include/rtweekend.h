@@ -1,5 +1,4 @@
-#ifndef RTWEEKEND_H
-#define RTWEEKEND_H
+#pragma once
 
 #include <cmath>
 #include <limits>
@@ -46,7 +45,6 @@ inline int random_int(int min, int max) {
 }
 
 // Common Headers
-#include "ray.h"
-#include "vec3.h"
+#include "geometry/ray.h"
+#include "math/vec3.h"
 
-#endif

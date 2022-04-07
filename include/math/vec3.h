@@ -122,7 +122,7 @@ inline vec3 unit_vector(vec3 v) {
 }
 
 /* 知道取到符合条件的点为止*/
-vec3 random_in_unit_sphere() {
+static vec3 random_in_unit_sphere() {
     while (true) {
         vec3 p = vec3::random(-1, 1);
         /* 因为圆心是(0,0)，坐标就是表示圆心到随机点的向量*/
@@ -133,12 +133,12 @@ vec3 random_in_unit_sphere() {
 }
 
 /* 随机后并且归一化 获得随机向量方向的 单位向量*/
-vec3 random_unit_vector() {
+static vec3 random_unit_vector() {
     return unit_vector(random_in_unit_sphere());
 }
 
 /* 根据法线随机在同侧半球面的单位向量*/
-vec3 random_in_hemisphere(const vec3 &normal) {
+static vec3 random_in_hemisphere(const vec3 &normal) {
     vec3 in_unit_sphere = random_in_unit_sphere();
 
     // In the same hemisphere as the normal
@@ -149,7 +149,7 @@ vec3 random_in_hemisphere(const vec3 &normal) {
 }
 
 /* 随机从圆盘选一点作为lookfrom发射光线*/
-vec3 random_in_unit_disk(){
+static vec3 random_in_unit_disk(){
     while (true) {
         auto p = vec3(random_double(-1, 1), random_double(-1, 1), 0);
         // 拒绝法
@@ -160,12 +160,12 @@ vec3 random_in_unit_disk(){
 
 /* 反射公式
    法线是单位向量 所以点积结果就是向量v在n上投影的长度*/
-vec3 reflect(const vec3 &v, const vec3 &n) {
+static vec3 reflect(const vec3 &v, const vec3 &n) {
     return v - 2 * dot(v, n) * n;
 }
 
 /* 折射公式*/
-vec3 refract(const vec3 &uv, const vec3 &n, double etai_over_etat) {
+static vec3 refract(const vec3 &uv, const vec3 &n, double etai_over_etat) {
     auto cos_theta = fmin(dot(-uv, n), 1.0);
     vec3 r_out_perp = etai_over_etat * (uv + cos_theta * n);
     vec3 r_out_parallel = -sqrt(fabs(1.0 - r_out_perp.length_squared())) * n;
