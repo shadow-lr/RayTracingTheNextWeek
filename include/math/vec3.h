@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+
 #include "rtweekend.h"
 
 using std::sqrt;
@@ -121,15 +122,23 @@ inline vec3 unit_vector(vec3 v) {
     return v / v.length();
 }
 
-/* 知道取到符合条件的点为止*/
 static vec3 random_in_unit_sphere() {
-    while (true) {
-        vec3 p = vec3::random(-1, 1);
-        /* 因为圆心是(0,0)，坐标就是表示圆心到随机点的向量*/
-        if (p.length_squared() >= 1)
-            continue;
-        return p;
-    }
+    auto [r1, r2] = random_point2d();
+    double theta = TWO_PI * r1;
+    double phi = std::acos(2 * r2 - 1);
+
+    return vec3(std::sin(theta) * std::sin(phi), std::cos(theta) * std::sin(phi), std::cos(phi));
+}
+
+// reject
+static vec3 random_in_unit_sphere_reject() {
+	while (true) {
+		vec3 p = vec3::random(-1, 1);
+		/* 因为圆心是(0,0)，坐标就是表示圆心到随机点的向量*/
+		if (p.length_squared() >= 1)
+			continue;
+		return p;
+	}
 }
 
 /* 随机后并且归一化 获得随机向量方向的 单位向量*/
@@ -150,12 +159,21 @@ static vec3 random_in_hemisphere(const vec3 &normal) {
 
 /* 随机从圆盘选一点作为lookfrom发射光线*/
 static vec3 random_in_unit_disk(){
-    while (true) {
-        auto p = vec3(random_double(-1, 1), random_double(-1, 1), 0);
-        // 拒绝法
-        if (p.length_squared() >= 1) continue;
-        return p;
-    }
+    auto& [r1, r2] = random_point2d();
+    
+    double theta = r1;
+    double phi = r2 * TWO_PI;
+
+    return vec3(theta * std::cos(phi), theta * std::sin(phi), 0);
+}
+
+// reject
+static vec3 random_in_unit_disk_reject() {
+	while (true) {
+		auto p = vec3(random_double(-1, 1), random_double(-1, 1), 0);
+		if (p.length_squared() >= 1) continue;
+		return p;
+	}
 }
 
 /* 反射公式

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "rtweekend.h"
-#include "hittable.h"
-#include "hittable_list.h"
+#include "geometry/hittable.h"
+#include "geometry/hittable_list.h"
 
 #include <algorithm>
 

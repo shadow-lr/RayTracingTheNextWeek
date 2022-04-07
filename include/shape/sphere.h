@@ -6,7 +6,7 @@
 
 class sphere : public hittable {
 public:
-    sphere() {}
+    sphere() = default;
 
     sphere(point3 cen, double r, shared_ptr<material> m) : center(cen), radius(r), mat_ptr(m) {};
 
@@ -19,10 +19,10 @@ public:
     // 更新 u v的值
     static void get_sphere_uv(const point3 &p, double &u, double &v) {
         double theta = acos(-p.y());
-        double phi = atan2(-p.z(), p.x()) + pi;
+        double phi = atan2(-p.z(), p.x()) + PI;
 
-        u = phi / (2 * pi);
-        v = theta / pi;
+        u = phi / (2 * PI);
+        v = theta / PI;
     }
 
 public:

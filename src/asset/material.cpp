@@ -5,23 +5,19 @@
 #include "asset/material.h"
 
 // 漫反射
-bool lambertian::scatter(const ray &r_in, const hit_record &rec, color &attenuation, ray &scattered) const {
-// 散射的向量
-    vec3 scatter_direction = rec.normal + random_unit_vector();
-//        vec3 scatter_direction = rec.normal + random_in_unit_sphere();
-//        vec3 scatter_direction = rec.normal + random_in_hemisphere(rec.normal);
+bool lambertian::scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const {
+	// 散射的向量
+	vec3 scatter_direction = rec.normal + random_unit_vector();
+	//        vec3 scatter_direction = rec.normal + random_in_unit_sphere();
+	//        vec3 scatter_direction = rec.normal + random_in_hemisphere(rec.normal);
 
-// Catch degenerate scatter direction
-    if (scatter_direction.
+	// Catch degenerate scatter direction
+	if (scatter_direction.near_zero())
+		scatter_direction = rec.normal;
 
-            near_zero()
-
-            )
-        scatter_direction = rec.normal;
-
-    scattered = ray(rec.p, scatter_direction, r_in.time());
-    attenuation = albedo->value(rec.u, rec.v, rec.p);
-    return true;
+	scattered = ray(rec.p, scatter_direction, r_in.time());
+	attenuation = albedo->value(rec.u, rec.v, rec.p);
+	return true;
 }
 
 // 金属

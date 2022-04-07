@@ -1,7 +1,5 @@
-#ifndef CUBE_H
-#define CUBE_H
-
-#include "hittable.h"
+#pragma once
+#include "geometry/hittable.h"
 
 class cube : public hittable {
 public:
@@ -22,4 +20,3 @@ bool cube::hit(const ray &r, double t_min, double t_max, hit_record &rec) const 
     return true;
 }
 
-#endif //CUBE_H
