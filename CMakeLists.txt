@@ -15,8 +15,6 @@ file(GLOB_RECURSE INCLUDE_FILES  ${CMAKE_SOURCE_DIR}/include/*.h ${CMAKE_SOURCE_
 file(GLOB_RECURSE SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/*.c ${CMAKE_SOURCE_DIR}/src/*.cpp)
 file(GLOB_RECURSE SHADERS_FILES ${CMAKE_SOURCE_DIR}/shaders/*.glsl ${CMAKE_SOURCE_DIR}/shaders/*.hlsl)
 
-message("CMAKE_SOURCE_DIR = " + ${CMAKE_SOURCE_DIR})
-
 # 对 AllFile 变量里面的所有文件分类(保留资源管理器的目录结构)
 set(AllFile ${INCLUDE_FILES} ${SOURCE_FILES} ${SHADERS_FILES})
 

@@ -2,7 +2,7 @@
 // Created by Fgly on 2022/4/7.
 //
 
-#include "material.h"
+#include "asset/material.h"
 
 // 漫反射
 bool lambertian::scatter(const ray &r_in, const hit_record &rec, color &attenuation, ray &scattered) const {

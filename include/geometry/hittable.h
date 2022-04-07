@@ -1,10 +1,9 @@
 #pragma once
-#ifndef HITTABLE_H
-#define HITTABLE_H
 
 #include "ray.h"
-#include "rtweekend.h"
 #include "aabb.h"
+
+#include "../rtweekend.h"
 
 class material;
 
@@ -34,5 +33,3 @@ public:
 
     virtual bool bounding_box(double time0, double time1, aabb &output_box) const = 0;
 };
-
-#endif

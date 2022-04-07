@@ -2,7 +2,7 @@
 // Created by Fgly on 2022/4/7.
 //
 
-#include "hittable_list.h"
+#include "geometry/hittable_list.h"
 
 /* 遍历objects中所有对象，与当前的射线进行相交检测*/
 bool hittable_list::hit(const ray &r, double t_min, double t_max, hit_record &rec) const {

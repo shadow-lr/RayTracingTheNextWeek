@@ -2,7 +2,7 @@
 // Created by Fgly on 2022/4/7.
 //
 
-#include "bvh.h"
+#include "geometry/bvh.h"
 
 bool bvh_node::hit(const ray &r, double t_min, double t_max, hit_record &rec) const {
     if (!box.hit(r, t_min, t_max))

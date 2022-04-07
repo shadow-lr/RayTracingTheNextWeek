@@ -1,7 +1,7 @@
 #pragma once
 
 #include "rtweekend.h"
-#include "hittable.h"
+#include "geometry/hittable.h"
 #include "texture.h"
 
 struct hit_record;
