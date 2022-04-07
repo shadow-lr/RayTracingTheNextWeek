@@ -7,6 +7,7 @@
 #include "shape/sphere.h"
 #include "asset/material.h"
 #include "asset/camera.h"
+#include "asset/noise_texture.h"
 
 #include <omp.h>
 #include <iostream>
@@ -18,7 +19,7 @@ hittable_list random_scene();
 
 // Image
 const double aspect_ratio = 16.0 / 9.0;
-const int image_width = 400;
+const int image_width = 2540;
 const int image_height = static_cast<int>(image_width / aspect_ratio);
 const int max_depth = 50;
 const int samples_per_pixel = 10;
@@ -132,6 +133,16 @@ hittable_list two_spheres() {
 	return objects;
 }
 
+hittable_list two_perlin_spheres(){
+    hittable_list objects;
+
+    auto pertext= make_shared<noise_texture>();
+    objects.add(make_shared<sphere>(point3(0,-1000,0), 1000, make_shared<lambertian>(pertext)));
+    objects.add(make_shared<sphere>(point3(0, 2, 0), 2, make_shared<lambertian>(pertext)));
+
+    return objects;
+}
+
 int main() {
 	// Render
 	std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
@@ -144,25 +155,31 @@ int main() {
 	double vfov = 40.0;
 	double aperture = 0.0;
 
-	int option = 1;
+	int option = 3;
 
-	switch (option) {
-	case 1:
-		world = random_scene();
-		lookfrom = point3(13, 2, 3);
-		lookat = point3(0, 0, 0);
-		vfov = 20.0;
-		aperture = 0.1;
-		break;
-	case 2:
-		world = two_spheres();
-		lookfrom = point3(13, 2, 3);
-		lookat = point3(0, 0, 0);
-		vfov = 20.0;
-		break;
-	}
+    switch (option) {
+        case 1:
+            world = random_scene();
+            lookfrom = point3(13, 2, 3);
+            lookat = point3(0, 0, 0);
+            vfov = 20.0;
+            aperture = 0.1;
+            break;
+        case 2:
+            world = two_spheres();
+            lookfrom = point3(13, 2, 3);
+            lookat = point3(0, 0, 0);
+            vfov = 20.0;
+            break;
+        case 3:
+            world = two_perlin_spheres();
+            lookfrom = point3(13, 2, 3);
+            lookat = point3(0, 0, 0);
+            vfov = 20.0;
+            break;
+    }
 
-	cam.reset(lookfrom, lookat, vup, vfov, aspect_ratio, aperture, dist_to_focus, 0.0, 1.0);
+    cam.reset(lookfrom, lookat, vup, vfov, aspect_ratio, aperture, dist_to_focus, 0.0, 1.0);
 
 	omp_set_num_threads(32);
 
