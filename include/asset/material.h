@@ -9,6 +9,11 @@ struct hit_record;
 // 告诉射线如何与表面相互作用
 class material {
 public:
+    // 对于可自发光的材质(light)
+    virtual color emitted(double u, double v, const point3 &p) const {
+        return color(0, 0, 0);
+    }
+
     /**
      * @brief 函数简要说明-测试函数
      * @param r_in              参数1 射线

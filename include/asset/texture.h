@@ -26,6 +26,7 @@ private:
     color color_value;
 };
 
+// 棋盘
 class checker_texture : public texture {
 public:
     checker_texture() {}
