@@ -19,6 +19,7 @@ file(GLOB_RECURSE SHADERS_FILES ${CMAKE_SOURCE_DIR}/shaders/*.glsl ${CMAKE_SOURC
 set(AllFile ${INCLUDE_FILES} ${SOURCE_FILES} ${SHADERS_FILES})
 
 foreach (fileItem ${AllFile})
+    message("Processing ${fileItem}")
     get_filename_component(PARENT_DIR "${fileItem}" DIRECTORY)
     string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" GROUP "${PARENT_DIR}")
     string(REPLACE "/" "\\" GROUP "${GROUP}")
@@ -30,7 +31,7 @@ endforeach ()
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
-add_executable(${PROJECT_NAME} ${AllFile})  # 告诉CMake构建目标, 使用 hello_src 这个源文件去构建 hello
+add_executable(${PROJECT_NAME} ${AllFile})
 
 set_property(SOURCE ${SHADER_FILES} PROPERTY VS_TOOL_OVERRIDE "shader")
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
