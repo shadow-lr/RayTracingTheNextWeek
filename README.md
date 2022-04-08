@@ -10,15 +10,19 @@ build_window.bat
 ## FrameWork
 include:
 ```txt
-include:
 │  color.h
 │  rtweekend.h
 │
 ├─asset
 │      camera.h
+│      image_texture.h
+│      light.h
 │      material.h
 │      noise_texture.h
 │      texture.h
+│
+├─external
+│      stb_image.h
 │
 ├─geometry
 │      aabb.h
@@ -26,6 +30,8 @@ include:
 │      hittable.h
 │      hittable_list.h
 │      ray.h
+│      rotate.h
+│      translate.h
 │
 ├─math
 │      vec3.h
@@ -34,12 +40,17 @@ include:
 │      perlin.h
 │
 ├─shape
+│      aarect.h
+│      box.h
 │      cube.h
 │      moving_sphere.h
 │      sphere.h
 │
-└─thread
-        render_thread.h
+├─thread
+│      render_thread.h
+│
+└─utility
+        rtw_stb_image.h
 ```
 src:
 ```txt
