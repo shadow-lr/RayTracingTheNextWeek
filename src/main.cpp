@@ -35,38 +35,34 @@ camera cam;
 std::vector<std::vector<color>> color_table(image_height + 1, std::vector<color>(image_width + 1));
 
 // ray recursion
-color ray_color(const ray& r, const hittable& world, int depth) {
+color ray_color(const ray& r, const color& background, const hittable& world, int depth) {
 	hit_record rec;
 
 	// If we've exceeded the ray bounce limit, no more light is gathered.
 	if (depth <= 0)
 		return color(0, 0, 0);
 
-	// 几何体的颜色
-	if (world.hit(r, 0.001, infinity, rec)) {
-		ray scattered;
-		color attenuation;
+	if (!world.hit(r, 0.001, infinity, rec))
+	    return background;
 
-		if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
-			return attenuation * ray_color(scattered, world, depth - 1);
-		return color(0, 0, 0);
-	}
+    ray scattered;
+    color attenuation;
+    color emitted = rec.mat_ptr->emitted(rec.u, rec.v, rec.p);
 
-	// 背景色
-	vec3 unit_direction = unit_vector(r.direction());
-	// x y z 映射 r g b
-	double t = 0.5 * (unit_direction.y() + 1.0);
-	return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
+    if (!rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+        return emitted;
+
+    return emitted + attenuation * ray_color(scattered, background, world, depth - 1);
 }
 
-void scan_calculate_color(int height, int width) {
+void scan_calculate_color(int height, int width, color& background) {
 	int i = width, j = height;
 	color pixel_color(0, 0, 0);
 	for (int s = 0; s < samples_per_pixel; ++s) {
 		double u = (i + random_double()) / (image_width - 1.0);
 		double v = (j + random_double()) / (image_height - 1.0);
 		ray r = cam.get_ray(u, v);
-		pixel_color += ray_color(r, world, max_depth);
+		pixel_color += ray_color(r, background, world, max_depth);
 	}
 	//    write_color(std::cout, pixel_color, samples_per_pixel);
 	write_color_table(pixel_color, samples_per_pixel, color_table, j, i);
@@ -170,6 +166,8 @@ int main() {
 	double vfov = 40.0;
 	double aperture = 0.0;
 
+    color background(0,0,0);
+
 	int option = 4;
 
     switch (option) {
@@ -179,24 +177,32 @@ int main() {
             lookat = point3(0, 0, 0);
             vfov = 20.0;
             aperture = 0.1;
+            background = color(0.70, 0.80, 1.00);
             break;
         case 2:
             world = two_spheres();
             lookfrom = point3(13, 2, 3);
             lookat = point3(0, 0, 0);
             vfov = 20.0;
+            background = color(0.70, 0.80, 1.00);
             break;
         case 3:
             world = two_perlin_spheres();
             lookfrom = point3(13, 2, 3);
             lookat = point3(0, 0, 0);
             vfov = 20.0;
+            background = color(0.70, 0.80, 1.00);
             break;
         case 4:
             world = earth();
             lookfrom = point3(13, 2, 3);
             lookat = point3(0, 0, 0);
             vfov = 20.0;
+            background = color(0.70, 0.80, 1.00);
+            break;
+
+        case 5:
+            background = color(0.0, 0.0, 0.0);
             break;
     }
 
@@ -208,7 +214,7 @@ int main() {
 	for (int j = image_height - 1; j >= 0; --j) {
 		std::cerr << "\routput remaining: " << j << ' ' << std::flush;
 		for (int i = 0; i < image_width; ++i) {
-			scan_calculate_color(j, i);
+			scan_calculate_color(j, i, background);
 		}
 	}
 
