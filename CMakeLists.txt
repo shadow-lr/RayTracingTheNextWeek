@@ -6,7 +6,7 @@ option(USE_SOLUTION_FOLDERS ON)# 允许对项目文件按文件夹分类
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_BUILD_TYPE "Release")
+#set(CMAKE_BUILD_TYPE "Release")
 
 include_directories(${CMAKE_SOURCE_DIR}/include)  # 让 CMake 找到头文件
 link_directories(${CMAKE_SOURCE_DIR}/lib)  # 让CMake找到库文件
@@ -19,13 +19,19 @@ file(GLOB_RECURSE SHADERS_FILES ${CMAKE_SOURCE_DIR}/shaders/*.glsl ${CMAKE_SOURC
 set(AllFile ${INCLUDE_FILES} ${SOURCE_FILES} ${SHADERS_FILES})
 
 foreach (fileItem ${AllFile})
-    message("Processing ${fileItem}")
     get_filename_component(PARENT_DIR "${fileItem}" DIRECTORY)
     string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" GROUP "${PARENT_DIR}")
     string(REPLACE "/" "\\" GROUP "${GROUP}")
     set(GROUP "${GROUP}")
     source_group("${GROUP}" FILES "${fileItem}")
 endforeach ()
+
+find_package(OPENMP REQUIRED)
+if (OPENMP_FOUND)
+    message("OPENMP FOUND")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMp_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMp_CXX_FLAGS}")
+endif()
 
 # 解决CLion + MSVC 下的字符编码问题
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")

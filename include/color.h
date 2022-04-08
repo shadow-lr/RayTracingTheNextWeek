@@ -36,9 +36,9 @@ void write_color_table(color pixel_color, int samples_per_pixel, std::vector<std
     g = sqrt(scale * g);
     b = sqrt(scale * b);
 
-    color_table[height][width].e[0] = 256 * clamp(r, 0.0, 0.999);
-    color_table[height][width].e[1] = 256 * clamp(g, 0.0, 0.999);
-    color_table[height][width].e[2] = 256 * clamp(b, 0.0, 0.999);
+    color_table[height][width].e[0] = 256 * clamp(r, 0.001, 0.999);
+    color_table[height][width].e[1] = 256 * clamp(g, 0.001, 0.999);
+    color_table[height][width].e[2] = 256 * clamp(b, 0.001, 0.999);
 }
 
 void out_color_table(std::ostream &out, std::vector<std::vector<color>> &color_table, int height, int width) {

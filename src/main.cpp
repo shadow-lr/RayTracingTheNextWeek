@@ -17,14 +17,15 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
+#include <fstream>
 
 // function
 hittable_list random_scene();
 
 // Image
-const double aspect_ratio = 16.0 / 9.0;
-const int image_width = 2540;
-const int image_height = static_cast<int>(image_width / aspect_ratio);
+double aspect_ratio = 16.0 / 9.0;
+int image_width = 400;
+int image_height = static_cast<int>(image_width / aspect_ratio);
 const int max_depth = 50;
 
 // World
@@ -32,6 +33,7 @@ hittable_list world = random_scene();
 
 camera cam;
 
+// 225 600
 std::vector<std::vector<color>> color_table(image_height + 1, std::vector<color>(image_width + 1));
 
 // ray recursion
@@ -165,10 +167,25 @@ hittable_list simple_light() {
     return objects;
 }
 
-int main() {
-    // Render
-    std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+hittable_list cornell_box() {
+    hittable_list objects;
 
+    auto red = make_shared<lambertian>(color(.65, .05, .05));
+    auto white = make_shared<lambertian>(color(.73, .73, .73));
+    auto green = make_shared<lambertian>(color(.12, .45, .15));
+    auto light = make_shared<diffuse_light>(color(15, 15, 15));
+
+    objects.add(make_shared<yz_rect>(0, 555, 0, 555, 555, green));
+    objects.add(make_shared<yz_rect>(0, 555, 0, 555, 0, red));
+    objects.add(make_shared<xz_rect>(213, 343, 227, 332, 554, light));
+    objects.add(make_shared<xz_rect>(0, 555, 0, 555, 0, white));
+    objects.add(make_shared<xz_rect>(0, 555, 0, 555, 555, white));
+    objects.add(make_shared<xy_rect>(0, 555, 0, 555, 555, white));
+
+    return objects;
+}
+
+int main() {
     // default Camera
     point3 lookfrom;
     point3 lookat;
@@ -181,7 +198,7 @@ int main() {
 
     color background(0, 0, 0);
 
-    int option = 6;
+    int option = 7;
 
     switch (option) {
         case 1:
@@ -225,18 +242,45 @@ int main() {
             lookat = point3(0, 2, 0);
             vfov = 20.0;
             break;
+        case 7:
+            world = cornell_box();
+            aspect_ratio = 1.0;
+            image_width = 2540;
+            samples_per_pixel = 200;
+            background = color(0, 0, 0);
+            lookfrom = point3(278, 278, -800);
+            lookat = point3(278, 278, 0);
+            vfov = 40.0;
+            break;
     }
 
     cam.reset(lookfrom, lookat, vup, vfov, aspect_ratio, aperture, dist_to_focus, 0.0, 1.0);
+    image_height = static_cast<int>(image_width / aspect_ratio);
+    color_table.resize(image_height + 1);
+    for (auto &col : color_table)
+    {
+        col.resize(image_width + 1);
+    }
 
-    omp_set_num_threads(32);
+	// Render
+	std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
-#pragma omp parllel for
+    omp_set_num_threads(8);
+
+    int finish = image_width - 1;
+    static omp_lock_t lock;
+    omp_init_lock(&lock);
+
+#pragma omp parallel for
     for (int j = image_height - 1; j >= 0; --j) {
-        std::cerr << "\routput remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i) {
             scan_calculate_color(j, i, background, samples_per_pixel);
         }
+
+        omp_set_lock(&lock);
+        std::cerr << "\routput remaining: " << finish << ' ' << std::flush;
+        finish--;
+        omp_unset_lock(&lock);
     }
 
     for (int j = image_height - 1; j >= 0; --j) {
