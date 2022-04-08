@@ -15,6 +15,7 @@ using std::sqrt;
 // Constants
 
 const double infinity = std::numeric_limits<double>::infinity();
+
 #define PI        3.14159265358979323846
 #define TWO_PI    6.28318530717958647692
 #define INV_PI    0.31830988618379067154
