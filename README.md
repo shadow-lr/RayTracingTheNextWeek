@@ -11,12 +11,13 @@ build_window.bat
 include:
 ```txt
 include:
-|  color.h
+│  color.h
 │  rtweekend.h
 │
 ├─asset
 │      camera.h
 │      material.h
+│      noise_texture.h
 │      texture.h
 │
 ├─geometry
@@ -25,11 +26,12 @@ include:
 │      hittable.h
 │      hittable_list.h
 │      ray.h
-│      test.h
-│      test_1.hpp
 │
 ├─math
 │      vec3.h
+│
+├─sample
+│      perlin.h
 │
 ├─shape
 │      cube.h
@@ -51,6 +53,9 @@ src:
 │      aabb.cpp
 │      bvh.cpp
 │      hittable_list.cpp
+│
+├─sample
+│      perlin.cpp
 │
 └─shape
         moving_sphere.cpp
