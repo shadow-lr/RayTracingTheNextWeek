@@ -5,14 +5,17 @@
 #include "color.h"
 #include "geometry/hittable_list.h"
 #include "shape/sphere.h"
+
 #include "asset/material.h"
 #include "asset/camera.h"
 #include "asset/noise_texture.h"
+#include "asset/image_texture.h"
 
 #include <omp.h>
 #include <iostream>
 #include <thread>
 #include <mutex>
+#include <direct.h>
 
 // function
 hittable_list random_scene();
@@ -143,6 +146,18 @@ hittable_list two_perlin_spheres() {
     return objects;
 }
 
+hittable_list earth(){
+    hittable_list objects;
+
+    auto earth_texture = make_shared<image_texture>("../assets/earthmap.jpg");
+    auto earth_surface = make_shared<lambertian>(earth_texture);
+
+//    auto globe = make_shared<sphere>(point3(0, 0, 0), 2, earth_surface);
+    objects.add(make_shared<sphere>(point3(0, 0, 0), 2, earth_surface));
+
+    return objects;
+}
+
 int main() {
 	// Render
 	std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
@@ -155,7 +170,7 @@ int main() {
 	double vfov = 40.0;
 	double aperture = 0.0;
 
-	int option = 3;
+	int option = 4;
 
     switch (option) {
         case 1:
@@ -173,6 +188,12 @@ int main() {
             break;
         case 3:
             world = two_perlin_spheres();
+            lookfrom = point3(13, 2, 3);
+            lookat = point3(0, 0, 0);
+            vfov = 20.0;
+            break;
+        case 4:
+            world = earth();
             lookfrom = point3(13, 2, 3);
             lookat = point3(0, 0, 0);
             vfov = 20.0;

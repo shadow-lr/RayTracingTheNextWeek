@@ -1,6 +1,7 @@
 #pragma once
 
 #include "texture.h"
+#include "utility/rtw_stb_image.h"
 
 class image_texture : public texture {
 public:
