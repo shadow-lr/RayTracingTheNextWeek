@@ -1,7 +1,3 @@
-//
-// Created by Fgly on 2022/4/7.
-//
-
 #include "asset/material.h"
 
 // 漫反射

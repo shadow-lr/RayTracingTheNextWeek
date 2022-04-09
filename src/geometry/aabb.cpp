@@ -1,28 +1,15 @@
 ﻿#include "geometry/aabb.h"
 
 bool aabb::hit(const ray& r, double t_min, double t_max) const {
-	for (int a = 0; a < 3; ++a) {
-		// X Y Z 一起比较 不断更新 t_min 和 t_max 取最小的t_min 和 最大的t_max
-//            auto t0 = fmin((minimum[a] - r.origin()[a]) / r.direction()[a],
-//                           (maximum[a] - r.origin()[a]) / r.direction()[a]);
-//
-//            auto t1 = fmax((minimum[a] - r.origin()[a]) / r.direction()[a],
-//                           (maximum[a] - r.origin()[a]) / r.direction()[a]);
+	vec3 invD = 1.0f / r.direction();
 
-		// 优化
-		auto invD = 1.0f / r.direction()[a];
+	auto t0 = (min() - r.origin()) * invD;
+	auto t1 = (max() - r.origin()) * invD;
 
-		auto t0 = (min()[a] - r.origin()[a]) * invD;
-		auto t1 = (max()[a] - r.origin()[a]) * invD;
-        if (invD < 0.0f)
-            std::swap(t0, t1);
+	t_min = std::max(t_min, Max(Min(t0, t1)));
+	t_max = std::min(t_max, Min(Max(t0, t1)));
 
-		t_min = t0 > t_min ? t0 : t_min;
-		t_max = t1 < t_max ? t1 : t_max;
-		if (t_max <= t_min)
-			return false;
-	}
-	return true;
+	return t_max > t_min;
 }
 
 aabb surrounding_box(const aabb& box0, const aabb& box1)

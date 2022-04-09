@@ -1,7 +1,3 @@
-//
-// Created by Fgly on 2022/4/7.
-//
-
 #include "geometry/bvh.h"
 
 bool bvh_node::hit(const ray &r, double t_min, double t_max, hit_record &rec) const {

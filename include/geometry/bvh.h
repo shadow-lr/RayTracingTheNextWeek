@@ -12,7 +12,6 @@ bool box_x_compare(const shared_ptr<hittable> a, const shared_ptr<hittable> b);
 bool box_y_compare(const shared_ptr<hittable> a, const shared_ptr<hittable> b);
 bool box_z_compare(const shared_ptr<hittable> a, const shared_ptr<hittable> b);
 
-
 // 3.8 BVH节点类
 class bvh_node : public hittable {
 public:

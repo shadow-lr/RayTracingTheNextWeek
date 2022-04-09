@@ -37,9 +37,11 @@ bool constant_medium::hit(const ray &r, double t_min, double t_max, hit_record &
 
     hit_record rec1, rec2;
 
+    // point of entry inside
     if (!boundary->hit(r, -infinity, infinity, rec1))
         return false;
 
+    // point of exit inside (same direction)
     if (!boundary->hit(r, rec1.t + 0.0001, infinity, rec2))
         return false;
 

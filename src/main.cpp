@@ -25,6 +25,7 @@
 #include <thread>
 #include <mutex>
 #include <fstream>
+#include <chrono>
 
 // function
 hittable_list random_scene();
@@ -377,7 +378,7 @@ int main() {
             world = final_scene();
             aspect_ratio = 1.0;
             image_width = 800;
-            samples_per_pixel = 600;
+            samples_per_pixel = 300;
             background = color(0, 0, 0);
             lookfrom = point3(478, 278, -600);
             lookat = point3(278, 278, 0);
@@ -401,6 +402,8 @@ int main() {
     static omp_lock_t lock;
     omp_init_lock(&lock);
 
+    const auto start = std::chrono::high_resolution_clock::now();
+
 #pragma omp parallel for
     for (int j = image_height - 1; j >= 0; --j) {
         for (int i = 0; i < image_width; ++i) {
@@ -420,5 +423,9 @@ int main() {
         }
     }
 
-    std::cerr << "\nDone.\n";
+    const auto stop = std::chrono::high_resolution_clock::now();
+    const auto elapsed = std::chrono::duration<float, std::chrono::seconds::period>(stop - start).count();
+
+
+    std::cerr << "\n" << "duration : " << elapsed << "s\tDone.\n";
 }
