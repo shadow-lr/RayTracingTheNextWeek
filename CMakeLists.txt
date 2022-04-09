@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 #set(CMAKE_BUILD_TYPE "Release")
 
 include_directories(${CMAKE_SOURCE_DIR}/include)  # 让 CMake 找到头文件
-link_directories(${CMAKE_SOURCE_DIR}/lib)  # 让CMake找到库文件
+#link_directories(${CMAKE_SOURCE_DIR}/lib)  # 让CMake找到库文件
 
 file(GLOB_RECURSE INCLUDE_FILES  ${CMAKE_SOURCE_DIR}/include/*.h ${CMAKE_SOURCE_DIR}/include/*.hpp)
 file(GLOB_RECURSE SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/*.c ${CMAKE_SOURCE_DIR}/src/*.cpp)
@@ -26,11 +26,11 @@ foreach (fileItem ${AllFile})
     source_group("${GROUP}" FILES "${fileItem}")
 endforeach ()
 
-find_package(OPENMP REQUIRED)
-if (OPENMP_FOUND)
-    message("OPENMP FOUND")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMp_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMp_CXX_FLAGS}")
+find_package(OpenMP REQUIRED)
+if (OpenMP_FOUND)
+    message("OpenMP FOUND")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
 # 解决CLion + MSVC 下的字符编码问题

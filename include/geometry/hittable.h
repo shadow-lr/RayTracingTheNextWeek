@@ -3,7 +3,7 @@
 #include "ray.h"
 #include "aabb.h"
 
-#include "rtweekend.h"
+#include "../rtweekend.h"
 
 class material;
 
